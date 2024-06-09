@@ -9,7 +9,8 @@ class Program
         var liftSystem = new LiftSystem(floorRange);
         
         liftSystem.RegisterLift(lift);
-        lift.RequestLift(2);
+        
+        liftSystem.RequestLift(2);
 
         Console.WriteLine("Lift at floor: " + liftSystem.GetLiftPosition(1));
     }

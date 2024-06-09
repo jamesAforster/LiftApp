@@ -10,11 +10,6 @@ public class Lift(int id) : ILift
     {
         LiftSystem = liftSystem;
     }
-
-    public void RequestLift(int floor)
-    {
-        LiftSystem?.RequestLift(floor);
-    }
 }
 
 public interface ILift

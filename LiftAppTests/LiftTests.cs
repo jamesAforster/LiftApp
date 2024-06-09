@@ -61,4 +61,25 @@ public class LiftTests
         // Act & Assert
         Assert.True(system.GetLiftPosition(2) == 5);
     }
+    
+    [Fact]
+    public void LiftSystemCanQueueLiftCommands()
+    {
+        // Arrange
+        var lift1 = new Lift(1);
+        
+        var floorRange = new Range(0, 10);
+        var system = new LiftSystem(floorRange);
+        
+        system.RegisterLift(lift1);
+
+        lift1.CurrentFloor = 1;
+
+        // Act
+        system.RequestLift(5);
+        
+        
+        // Act & Assert
+        Assert.True(system.GetLiftPosition(2) == 5);
+    }
 }
