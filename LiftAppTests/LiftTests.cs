@@ -2,10 +2,10 @@ using LiftApp;
 
 namespace LiftAppTests;
 
-public class UnitTest1
+public class LiftTests
 {
     [Fact]
-    public void Test1()
+    public void WhenLiftCalledToFloor_LiftAppearsAtFloor()
     {
         // Arrange
         var lift = new Lift();
@@ -16,6 +16,6 @@ public class UnitTest1
         sut.CallLift(floor);
         
         // Assert
-        Assert.True(sut.Lift.Floor == floor);
+        Assert.True(sut.GetLiftPosition == floor);
     }
 }
