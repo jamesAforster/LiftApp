@@ -34,9 +34,6 @@ public class LiftTests
         var floorRange = new Range(0, 10);
         var system = new LiftSystem(floorRange);
         system.RegisterLift(lift);
-
-        // Act
-        system.RequestLift(requestedFloor);
         
         // Act & Assert
         Assert.Throws<ArgumentOutOfRangeException>(() => system.RequestLift(requestedFloor));
