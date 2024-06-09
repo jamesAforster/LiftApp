@@ -1,11 +1,16 @@
 namespace LiftApp;
 
-public class LiftSystem
+public interface ILiftSystem
+{
+    void RequestLift(int floor);
+}
+
+public class LiftSystem : ILiftSystem
 {
     private Lift _lift;
     private Range _floorRange;
 
-    public int GetLiftPosition => _lift.Floor;
+    public int GetLiftPosition => _lift.CurrentFloor;
     
     public LiftSystem(Lift lift, Range floorRange)
     {
@@ -13,7 +18,7 @@ public class LiftSystem
         _floorRange = floorRange;
     }
 
-    public void CallLift(int floor)
+    public void RequestLift(int floor)
     {
         if (FloorIsWithinRange(floor))
         {
@@ -30,5 +35,5 @@ public class LiftSystem
         return floor >= _floorRange.Start.Value && floor <= _floorRange.End.Value;
     }
 
-    private void SetCurrentFloor(int floor) => _lift.Floor = floor;
+    private void SetCurrentFloor(int floor) => _lift.CurrentFloor = floor;
 }

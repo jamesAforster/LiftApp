@@ -2,5 +2,5 @@ namespace LiftApp;
 
 public class Lift
 {
-    public int Floor { get; set; }
+    public int CurrentFloor { get; set; }
 }

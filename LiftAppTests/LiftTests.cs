@@ -14,7 +14,7 @@ public class LiftTests
         var floor = 2;
         
         // Act
-        sut.CallLift(floor);
+        sut.RequestLift(floor);
         
         // Assert
         Assert.True(sut.GetLiftPosition == floor);
@@ -33,6 +33,6 @@ public class LiftTests
         var sut = new LiftSystem(lift, floorRange);
         
         // Act & Assert
-        Assert.Throws<ArgumentOutOfRangeException>(() => sut.CallLift(requestedFloor));
+        Assert.Throws<ArgumentOutOfRangeException>(() => sut.RequestLift(requestedFloor));
     }
 }
