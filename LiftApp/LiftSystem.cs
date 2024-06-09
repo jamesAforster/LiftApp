@@ -15,6 +15,20 @@ public class LiftSystem
 
     public void CallLift(int floor)
     {
-        _lift.Floor = floor;
+        if (FloorIsWithinRange(floor))
+        {
+            SetCurrentFloor(floor);
+        }
+        else
+        {
+            throw new ArgumentOutOfRangeException();
+        }
     }
+
+    private bool FloorIsWithinRange(int floor)
+    {
+        return floor >= _floorRange.Start.Value && floor <= _floorRange.End.Value;
+    }
+
+    private void SetCurrentFloor(int floor) => _lift.Floor = floor;
 }

@@ -9,7 +9,7 @@ public class LiftTests
     {
         // Arrange
         var lift = new Lift();
-        var floorRange = new Range(0, 5);
+        var floorRange = new Range(0, 10);
         var sut = new LiftSystem(lift, floorRange);
         var floor = 2;
         
@@ -20,16 +20,19 @@ public class LiftTests
         Assert.True(sut.GetLiftPosition == floor);
     }
     
-    [Fact]
-    public void WhenLiftCalledToFloor_NotWithinLiftRange_ExceptionIsThrown()
+    [Theory]
+    [InlineData(-20)]
+    [InlineData(-1)]
+    [InlineData(11)]
+    [InlineData(20)]
+    public void WhenLiftCalledToFloor_NotWithinLiftRange_ExceptionIsThrown(int requestedFloor)
     {
         // Arrange
         var lift = new Lift();
-        var floorRange = new Range(0, 5);
+        var floorRange = new Range(0, 10);
         var sut = new LiftSystem(lift, floorRange);
-        var floor = 10;
         
         // Act & Assert
-        Assert.Throws<ArgumentOutOfRangeException>(() => sut.GetLiftPosition == floor);
+        Assert.Throws<ArgumentOutOfRangeException>(() => sut.CallLift(requestedFloor));
     }
 }
