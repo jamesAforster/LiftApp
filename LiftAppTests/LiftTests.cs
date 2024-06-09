@@ -1,3 +1,4 @@
+using System.Collections;
 using LiftApp;
 
 namespace LiftAppTests;
@@ -63,23 +64,28 @@ public class LiftTests
     }
     
     [Fact]
-    public void LiftSystemCanQueueLiftCommands()
+    public void LiftSystemCanEnqueueLiftCommands()
     {
         // Arrange
         var lift1 = new Lift(1);
-        
         var floorRange = new Range(0, 10);
         var system = new LiftSystem(floorRange);
+        var expectedQueue = new Queue();
+        
+        expectedQueue.Enqueue(1);
+        expectedQueue.Enqueue(2);
+        expectedQueue.Enqueue(3);
         
         system.RegisterLift(lift1);
-
-        lift1.CurrentFloor = 1;
-
+        
         // Act
-        system.RequestLift(5);
+        system.RequestLift(1);
+        system.RequestLift(2);
+        system.RequestLift(3);
         
-        
-        // Act & Assert
-        Assert.True(system.GetLiftPosition(2) == 5);
+        // Assert
+        Assert.Equal(expectedQueue, system.CommandQueue);
     }
+    
+    // Next, we will need to send the lifts to the floors, and dequeue the commands
 }

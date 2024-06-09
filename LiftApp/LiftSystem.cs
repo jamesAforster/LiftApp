@@ -1,3 +1,5 @@
+using System.Collections;
+
 namespace LiftApp;
 
 public interface ILiftSystem
@@ -9,16 +11,20 @@ public class LiftSystem : ILiftSystem
 {
     private List<ILift> _lifts = new List<ILift>();
     private Range _floorRange;
+    private Queue _commandQueue;
     
     public LiftSystem(Range floorRange)
     {
         _floorRange = floorRange;
+        _commandQueue = new Queue();
     }
+
+    public Queue CommandQueue => _commandQueue;
 
     public void RegisterLift(Lift lift)
     {
         lift.SetLiftSystem(this);
-        lift.CurrentFloor = 0;
+        lift.CurrentFloor = 0; // Todo: field should not be publicly accessible in future
         _lifts.Add(lift);
     }
     
@@ -31,7 +37,8 @@ public class LiftSystem : ILiftSystem
     {
         if (FloorIsWithinRange(floor))
         {
-            SendLiftToFloor(floor);
+            _commandQueue.Enqueue(floor);
+            ProcessQueue();
         }
         else
         {
@@ -44,11 +51,13 @@ public class LiftSystem : ILiftSystem
         return floor >= _floorRange.Start.Value && floor <= _floorRange.End.Value;
     }
 
-    private void SendLiftToFloor(int floor)
+    private void ProcessQueue()
     {
-        ILift lift = FindNearestLift(floor);
-
-        lift.CurrentFloor = floor;
+        foreach (int i in _commandQueue)
+        {
+            ILift lift = FindNearestLift(i);
+            lift.CurrentFloor = i;
+        }
     }
     private ILift FindNearestLift(int floor)
     {
