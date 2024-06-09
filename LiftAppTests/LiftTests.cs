@@ -10,14 +10,16 @@ public class LiftTests
         // Arrange
         var lift = new Lift();
         var floorRange = new Range(0, 10);
-        var sut = new LiftSystem(lift, floorRange);
+        var system = new LiftSystem(floorRange);
+        system.RegisterLift(lift);
+        
         var floor = 2;
         
         // Act
-        sut.RequestLift(floor);
+        system.RequestLift(floor);
         
         // Assert
-        Assert.True(sut.GetLiftPosition == floor);
+        Assert.True(system.GetLiftPosition == floor);
     }
     
     [Theory]
@@ -30,9 +32,13 @@ public class LiftTests
         // Arrange
         var lift = new Lift();
         var floorRange = new Range(0, 10);
-        var sut = new LiftSystem(lift, floorRange);
+        var system = new LiftSystem(floorRange);
+        system.RegisterLift(lift);
+
+        // Act
+        system.RequestLift(requestedFloor);
         
         // Act & Assert
-        Assert.Throws<ArgumentOutOfRangeException>(() => sut.RequestLift(requestedFloor));
+        Assert.Throws<ArgumentOutOfRangeException>(() => system.RequestLift(requestedFloor));
     }
 }

@@ -7,14 +7,19 @@ public interface ILiftSystem
 
 public class LiftSystem : ILiftSystem
 {
-    private Lift _lift;
+    private ILift _lift;
     private Range _floorRange;
 
     public int GetLiftPosition => _lift.CurrentFloor;
-    
-    public LiftSystem(Lift lift, Range floorRange)
+
+    public void RegisterLift(Lift lift)
     {
+        lift.SetLiftSystem(this);
         _lift = lift;
+    }
+    
+    public LiftSystem(Range floorRange)
+    {
         _floorRange = floorRange;
     }
 

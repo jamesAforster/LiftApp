@@ -1,6 +1,23 @@
 namespace LiftApp;
 
-public class Lift
+public class Lift : ILift
 {
     public int CurrentFloor { get; set; }
+    public ILiftSystem LiftSystem { get; set; }
+
+    public void SetLiftSystem(ILiftSystem liftSystem)
+    {
+        LiftSystem = liftSystem;
+    }
+
+    public void RequestLift(int floor)
+    {
+        LiftSystem.RequestLift(floor);
+    }
+}
+
+public interface ILift
+{
+    public int CurrentFloor { get; set; }
+    public ILiftSystem LiftSystem { get; set; }
 }
