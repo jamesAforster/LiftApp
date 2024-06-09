@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiftApp", "LiftApp\LiftApp.csproj", "{D3EDDA22-0797-4D79-AD75-93D7F3DD2855}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiftAppTests", "LiftAppTests\LiftAppTests.csproj", "{D44CF089-FE7F-4EC0-887F-6E3BDB2C21DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{D3EDDA22-0797-4D79-AD75-93D7F3DD2855}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3EDDA22-0797-4D79-AD75-93D7F3DD2855}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3EDDA22-0797-4D79-AD75-93D7F3DD2855}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D44CF089-FE7F-4EC0-887F-6E3BDB2C21DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D44CF089-FE7F-4EC0-887F-6E3BDB2C21DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D44CF089-FE7F-4EC0-887F-6E3BDB2C21DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D44CF089-FE7F-4EC0-887F-6E3BDB2C21DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
