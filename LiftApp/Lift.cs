@@ -8,7 +8,8 @@ public class Lift(int id) : ILift
         if (CurrentFloor != floor)
         {
             Console.WriteLine($"I am at floor {CurrentFloor}");
-            Thread.Sleep(5000);
+            var timeToTravel = Math.Abs(CurrentFloor - floor) * 1000;
+            Thread.Sleep(timeToTravel);
             CurrentFloor = floor;
             Console.WriteLine($"I am at floor {CurrentFloor}");
         }
