@@ -56,7 +56,7 @@ public class LiftSystem : ILiftSystem
         foreach (int i in _commandQueue)
         {
             ILift lift = FindNearestLift(i);
-            lift.CurrentFloor = i;
+            lift.GoToFloor(i);
         }
     }
     private ILift FindNearestLift(int floor)

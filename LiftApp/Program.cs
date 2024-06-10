@@ -12,6 +12,6 @@ class Program
         
         liftSystem.RequestLift(2);
 
-        Console.WriteLine("Lift at floor: " + liftSystem.GetLiftPosition(1));
+        Console.WriteLine("Program finished");
     }
 }
