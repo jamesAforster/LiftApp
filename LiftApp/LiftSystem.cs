@@ -17,6 +17,7 @@ public class LiftSystem : ILiftSystem
     {
         _floorRange = floorRange;
         _commandQueue = new Queue();
+        ProcessQueue();
     }
 
     public Queue CommandQueue => _commandQueue;
@@ -38,7 +39,6 @@ public class LiftSystem : ILiftSystem
         if (FloorIsWithinRange(floor))
         {
             _commandQueue.Enqueue(floor);
-            ProcessQueue();
         }
         else
         {
@@ -53,12 +53,36 @@ public class LiftSystem : ILiftSystem
 
     private void ProcessQueue()
     {
-        foreach (int i in _commandQueue)
+        while (true)
         {
-            ILift lift = FindNearestLift(i);
-            lift.GoToFloor(i);
+            foreach (int i in _commandQueue)
+            {
+                if (LiftsAreNotInTransit())
+                {
+                    InitiateCommand(i);
+                }
+                else
+                {
+                    ProcessQueue();
+                }
+            }
+            
         }
     }
+
+    private IEnumerable<int> InitiateCommand(int i)
+    {
+        ILift lift = FindNearestLift(i);
+        lift.GoToFloor(i);
+        _commandQueue.Dequeue();
+        yield break;
+    }
+
+    private bool LiftsAreNotInTransit()
+    {
+        return !_lifts.Any(l => l.InTransit);
+    }
+    
     private ILift FindNearestLift(int floor)
     {
         return _lifts

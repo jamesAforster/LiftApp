@@ -3,14 +3,18 @@ namespace LiftApp;
 public class Lift(int id) : ILift
 {
     public int Id { get; set; } = id;
-    public void GoToFloor(int floor)
+    public bool InTransit { get; set; }
+
+    public async Task GoToFloor(int floor)
     {
         if (CurrentFloor != floor)
         {
             Console.WriteLine($"I am at floor {CurrentFloor}");
-            var timeToTravel = Math.Abs(CurrentFloor - floor) * 1000;
-            Thread.Sleep(timeToTravel);
+            InTransit = true;
+            // var timeToTravel = Math.Abs(CurrentFloor - floor) * 1000;
+            Thread.Sleep(1000);
             CurrentFloor = floor;
+            InTransit = false;
             Console.WriteLine($"I am at floor {CurrentFloor}");
         }
     }
@@ -27,7 +31,8 @@ public class Lift(int id) : ILift
 public interface ILift
 {
     public int Id { get; set; }
-    public void GoToFloor(int floor);
+    public Task GoToFloor(int floor);
     public int CurrentFloor { get; set; }
     public ILiftSystem LiftSystem { get; set; }
+    public bool InTransit { get; set; }
 }

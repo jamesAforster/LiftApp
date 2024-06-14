@@ -87,5 +87,24 @@ public class LiftTests
         Assert.Equal(expectedQueue, system.CommandQueue);
     }
     
-    // Next, we will need to send the lifts to the floors, and dequeue the commands
+    [Fact]
+    public void LiftSystem_SendsAnotherLift_IfLiftIsInTransit()
+    {
+        // Arrange
+        var lift1 = new Lift(1);
+        var lift2 = new Lift(2);
+        var floorRange = new Range(0, 10);
+        var system = new LiftSystem(floorRange);
+        
+        system.RegisterLift(lift1);
+        system.RegisterLift(lift2);
+        
+        // Act
+        system.RequestLift(1);
+        system.RequestLift(2);
+        
+        // Assert
+        Assert.Equal(system.GetLiftPosition(1), 1);
+        Assert.Equal(system.GetLiftPosition(2), 2);
+    }
 }
