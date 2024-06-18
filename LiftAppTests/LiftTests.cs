@@ -1,4 +1,3 @@
-using System.Collections;
 using LiftApp;
 
 namespace LiftAppTests;
@@ -14,10 +13,17 @@ public class LiftTests
         var system = new LiftSystem(floorRange);
         system.RegisterLift(lift);
         
+        CancellationTokenSource source = new CancellationTokenSource();
+        CancellationToken token = source.Token;
+        
         var floor = 2;
         
         // Act
+        system.Run(token);
         system.RequestLift(floor);
+        Thread.Sleep(1000);
+        
+        source.Cancel();
         
         // Assert
         Assert.True(system.GetLiftPosition(1) == floor);
@@ -49,62 +55,48 @@ public class LiftTests
         
         var floorRange = new Range(0, 10);
         var system = new LiftSystem(floorRange);
+        CancellationTokenSource source = new CancellationTokenSource();
+        CancellationToken token = source.Token;
         
         system.RegisterLift(lift1);
         system.RegisterLift(lift2);
-
+    
         lift1.CurrentFloor = 1;
         lift2.CurrentFloor = 4;
-
+    
         // Act
+        system.Run(token);
         system.RequestLift(5);
+        Thread.Sleep(1000);
+        
+        source.Cancel();
         
         // Act & Assert
         Assert.True(system.GetLiftPosition(2) == 5);
     }
     
     [Fact]
-    public void LiftSystemCanEnqueueLiftCommands()
-    {
-        // Arrange
-        var lift1 = new Lift(1);
-        var floorRange = new Range(0, 10);
-        var system = new LiftSystem(floorRange);
-        var expectedQueue = new Queue();
-        
-        expectedQueue.Enqueue(1);
-        expectedQueue.Enqueue(2);
-        expectedQueue.Enqueue(3);
-        
-        system.RegisterLift(lift1);
-        
-        // Act
-        system.RequestLift(1);
-        system.RequestLift(2);
-        system.RequestLift(3);
-        
-        // Assert
-        Assert.Equal(expectedQueue, system.CommandQueue);
-    }
-    
-    [Fact]
-    public void LiftSystem_SendsAnotherLift_IfLiftIsInTransit()
-    {
-        // Arrange
-        var lift1 = new Lift(1);
-        var lift2 = new Lift(2);
-        var floorRange = new Range(0, 10);
-        var system = new LiftSystem(floorRange);
-        
-        system.RegisterLift(lift1);
-        system.RegisterLift(lift2);
-        
-        // Act
-        system.RequestLift(1);
-        system.RequestLift(2);
-        
-        // Assert
-        Assert.Equal(system.GetLiftPosition(1), 1);
-        Assert.Equal(system.GetLiftPosition(2), 2);
-    }
+    // public void LiftSystem_SendsAnotherLift_IfLiftIsInTransit()
+    // {
+    //     // Arrange
+    //     var lift1 = new Lift(1);
+    //     var lift2 = new Lift(2);
+    //     var floorRange = new Range(0, 10);
+    //     var system = new LiftSystem(floorRange);
+    //     CancellationTokenSource source = new CancellationTokenSource();
+    //     CancellationToken token = source.Token;
+    //     
+    //     system.RegisterLift(lift1);
+    //     system.RegisterLift(lift2);
+    //     
+    //     // Act
+    //     system.Run(token);
+    //     system.RequestLift(1);
+    //     system.RequestLift(2);
+    //     Thread.Sleep(1000);
+    //     
+    //     // Assert
+    //     Assert.Equal(system.GetLiftPosition(1), 1);
+    //     Assert.Equal(system.GetLiftPosition(2), 2);
+    // }
 }

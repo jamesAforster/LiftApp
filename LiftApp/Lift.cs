@@ -11,8 +11,6 @@ public class Lift(int id) : ILift
         {
             Console.WriteLine($"I am at floor {CurrentFloor}");
             InTransit = true;
-            // var timeToTravel = Math.Abs(CurrentFloor - floor) * 1000;
-            Thread.Sleep(1000);
             CurrentFloor = floor;
             InTransit = false;
             Console.WriteLine($"I am at floor {CurrentFloor}");

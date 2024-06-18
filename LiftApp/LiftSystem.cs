@@ -1,4 +1,4 @@
-using System.Collections;
+using System.Collections.Concurrent;
 
 namespace LiftApp;
 
@@ -11,16 +11,40 @@ public class LiftSystem : ILiftSystem
 {
     private List<ILift> _lifts = new List<ILift>();
     private Range _floorRange;
-    private Queue _commandQueue;
+    private Queue<int> _commandQueue;
     
     public LiftSystem(Range floorRange)
     {
         _floorRange = floorRange;
-        _commandQueue = new Queue();
-        ProcessQueue();
+        _commandQueue = new Queue<int>();
     }
 
-    public Queue CommandQueue => _commandQueue;
+    public Queue<int> CommandQueue => _commandQueue;
+
+    public Task Run(CancellationToken token)
+    {
+        Task.Run(() =>
+        {
+            while (!token.IsCancellationRequested)
+            {
+                foreach (int i in _commandQueue.ToList())
+                {
+                    if (!LiftsAreInTransit())
+                    {
+                        ILift lift = FindNearestLift(i);
+                        lift.GoToFloor(i);
+                        _commandQueue.Dequeue();
+                    }
+                    else
+                    {
+                        Run(token);
+                    }
+                }
+            }
+        });
+
+        return Task.CompletedTask;
+    }
 
     public void RegisterLift(Lift lift)
     {
@@ -51,36 +75,16 @@ public class LiftSystem : ILiftSystem
         return floor >= _floorRange.Start.Value && floor <= _floorRange.End.Value;
     }
 
-    private void ProcessQueue()
-    {
-        while (true)
-        {
-            foreach (int i in _commandQueue)
-            {
-                if (LiftsAreNotInTransit())
-                {
-                    InitiateCommand(i);
-                }
-                else
-                {
-                    ProcessQueue();
-                }
-            }
-            
-        }
-    }
-
     private IEnumerable<int> InitiateCommand(int i)
     {
         ILift lift = FindNearestLift(i);
         lift.GoToFloor(i);
-        _commandQueue.Dequeue();
         yield break;
     }
 
-    private bool LiftsAreNotInTransit()
+    private bool LiftsAreInTransit()
     {
-        return !_lifts.Any(l => l.InTransit);
+        return _lifts.Any(l => l.InTransit);
     }
     
     private ILift FindNearestLift(int floor)
