@@ -1,5 +1,3 @@
-using System.Collections.Concurrent;
-
 namespace LiftApp;
 
 public interface ILiftSystem
@@ -18,8 +16,6 @@ public class LiftSystem : ILiftSystem
         _floorRange = floorRange;
         _commandQueue = new Queue<int>();
     }
-
-    public Queue<int> CommandQueue => _commandQueue;
 
     public Task Run(CancellationToken token)
     {

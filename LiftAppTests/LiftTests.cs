@@ -73,7 +73,7 @@ public class LiftTests
         source.Cancel();
         
         // Assert
-        Assert.Equal(system.GetLiftPosition(1), 2);
-        Assert.Equal(system.GetLiftPosition(2), 8);
+        Assert.Equal(2, system.GetLiftPosition(1));
+        Assert.Equal(8, system.GetLiftPosition(2));
     }
 }
