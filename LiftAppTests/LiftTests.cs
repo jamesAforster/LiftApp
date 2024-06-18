@@ -47,7 +47,7 @@ public class LiftTests
     }
     
     [Fact]
-    public void LiftSystem_SendsAnotherLift_IfLiftIsInTransit()
+    public void WhenLiftCalledToFloor_NearestLiftAppearsAtFloor()
     {
         // Arrange
         var lift1 = new Lift(1);
@@ -66,7 +66,6 @@ public class LiftTests
         // Act
         system.Run(token);
         system.RequestLift(2);
-        system.RequestLift(8);
         
         Thread.Sleep(1000);
         
@@ -74,6 +73,36 @@ public class LiftTests
         
         // Assert
         Assert.Equal(2, system.GetLiftPosition(1));
-        Assert.Equal(8, system.GetLiftPosition(2));
+    }
+    
+    [Fact]
+    public void WhenLiftCalledToFloor_AndLiftIsInTransit_RestingLiftAppearsAtFloor()
+    {
+        // Arrange
+        var lift1 = new Lift(1);
+        var lift2 = new Lift(2);
+        var floorRange = new Range(0, 10);
+        var system = new LiftSystem(floorRange);
+        CancellationTokenSource source = new CancellationTokenSource();
+        CancellationToken token = source.Token;
+        
+        system.RegisterLift(lift1);
+        lift1.CurrentFloor = 1;
+        
+        system.RegisterLift(lift2);
+        lift2.CurrentFloor = 1;
+        
+        // Act
+        system.Run(token);
+        system.RequestLift(10);
+        system.RequestLift(5);
+        
+        Thread.Sleep(1000);
+        
+        source.Cancel();
+        
+        // Assert
+        Assert.Equal(10, system.GetLiftPosition(1));
+        Assert.Equal(5, system.GetLiftPosition(2));
     }
 }

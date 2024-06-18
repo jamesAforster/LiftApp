@@ -18,7 +18,7 @@ public class Lift(int id) : ILift
         }
     }
 
-    public int CurrentFloor { get; set; }
+    public int CurrentFloor { get; set; }  // Todo: field should not be publicly accessible in future
     public ILiftSystem? LiftSystem { get; set; }
 
     public void SetLiftSystem(ILiftSystem liftSystem)
