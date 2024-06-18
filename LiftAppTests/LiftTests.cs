@@ -1,17 +1,12 @@
-using LiftApp;
-
 namespace LiftAppTests;
 
-public class LiftTests
+public class LiftTests : LiftsTestBase
 {
     [Fact]
     public void WhenLiftCalledToFloor_LiftAppearsAtFloor()
     {
         // Arrange
-        var lift = new Lift(1);
-        var floorRange = new Range(0, 10);
-        var system = new LiftSystem(floorRange);
-        system.RegisterLift(lift);
+        var sut = GetLiftSystem();
         
         CancellationTokenSource source = new CancellationTokenSource();
         CancellationToken token = source.Token;
@@ -19,14 +14,14 @@ public class LiftTests
         var floor = 2;
         
         // Act
-        system.Run(token);
-        system.RequestLift(floor);
+        sut.Run(token);
+        sut.RequestLift(floor);
         Thread.Sleep(1000);
         
         source.Cancel();
         
         // Assert
-        Assert.True(system.GetLiftPosition(1) == floor);
+        Assert.True(sut.GetLiftPosition(1) == floor);
     }
     
     [Theory]
@@ -37,72 +32,59 @@ public class LiftTests
     public void WhenLiftCalledToFloor_NotWithinLiftRange_ExceptionIsThrown(int requestedFloor)
     {
         // Arrange
-        var lift = new Lift(1);
-        var floorRange = new Range(0, 10);
-        var system = new LiftSystem(floorRange);
-        system.RegisterLift(lift);
+        var sut = GetLiftSystem();;
         
         // Act & Assert
-        Assert.Throws<ArgumentOutOfRangeException>(() => system.RequestLift(requestedFloor));
+        Assert.Throws<ArgumentOutOfRangeException>(() => sut.RequestLift(requestedFloor));
     }
     
     [Fact]
     public void WhenLiftCalledToFloor_NearestLiftAppearsAtFloor()
     {
         // Arrange
-        var lift1 = new Lift(1);
-        var lift2 = new Lift(2);
-        var floorRange = new Range(0, 10);
-        var system = new LiftSystem(floorRange);
+        var sut = GetLiftSystem(2);
+        
         CancellationTokenSource source = new CancellationTokenSource();
         CancellationToken token = source.Token;
         
-        system.RegisterLift(lift1);
-        lift1.CurrentFloor = 1;
-        
-        system.RegisterLift(lift2);
-        lift2.CurrentFloor = 9;
+        SetLift(1, 1);
+        SetLift(2, 10);
         
         // Act
-        system.Run(token);
-        system.RequestLift(2);
+        sut.Run(token);
+        sut.RequestLift(2);
         
         Thread.Sleep(1000);
         
         source.Cancel();
         
         // Assert
-        Assert.Equal(2, system.GetLiftPosition(1));
+        Assert.Equal(2, sut.GetLiftPosition(1));
     }
     
     [Fact]
     public void WhenLiftCalledToFloor_AndLiftIsInTransit_RestingLiftAppearsAtFloor()
     {
         // Arrange
-        var lift1 = new Lift(1);
-        var lift2 = new Lift(2);
-        var floorRange = new Range(0, 10);
-        var system = new LiftSystem(floorRange);
+        var sut = GetLiftSystem(2);
+        
         CancellationTokenSource source = new CancellationTokenSource();
         CancellationToken token = source.Token;
         
-        system.RegisterLift(lift1);
-        lift1.CurrentFloor = 1;
-        
-        system.RegisterLift(lift2);
-        lift2.CurrentFloor = 1;
-        
+        SetLift(1, 1);
+        SetLift(2, 1);
+
         // Act
-        system.Run(token);
-        system.RequestLift(10);
-        system.RequestLift(5);
+        sut.Run(token);
+        sut.RequestLift(10);
+        sut.RequestLift(5);
         
         Thread.Sleep(1000);
         
         source.Cancel();
         
         // Assert
-        Assert.Equal(10, system.GetLiftPosition(1));
-        Assert.Equal(5, system.GetLiftPosition(2));
+        Assert.Equal(10, sut.GetLiftPosition(1));
+        Assert.Equal(5, sut.GetLiftPosition(2));
     }
 }

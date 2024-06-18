@@ -2,20 +2,16 @@ namespace LiftApp;
 
 public interface ILiftSystem
 {
+    public List<ILift> Lifts();
     void RequestLift(int floor);
 }
 
-public class LiftSystem : ILiftSystem
+public class LiftSystem(Range floorRange) : ILiftSystem
 {
-    private List<ILift> _lifts = new List<ILift>();
-    private Range _floorRange;
-    private Queue<int> _commandQueue;
+    public  List<ILift> Lifts() => _lifts;  // todo: Nasty, just here for test purposes
     
-    public LiftSystem(Range floorRange)
-    {
-        _floorRange = floorRange;
-        _commandQueue = new Queue<int>();
-    }
+    private List<ILift> _lifts = new List<ILift>();
+    private Queue<int> _commandQueue = new();
 
     public Task Run(CancellationToken token)
     {
@@ -68,7 +64,7 @@ public class LiftSystem : ILiftSystem
 
     private bool FloorIsWithinRange(int floor)
     {
-        return floor >= _floorRange.Start.Value && floor <= _floorRange.End.Value;
+        return floor >= floorRange.Start.Value && floor <= floorRange.End.Value;
     }
 
     private IEnumerable<int> InitiateCommand(int i)
