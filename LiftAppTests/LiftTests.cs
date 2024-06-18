@@ -75,7 +75,7 @@ public class LiftTests
         Assert.True(system.GetLiftPosition(2) == 5);
     }
     
-    [Fact]
+    // [Fact]
     // public void LiftSystem_SendsAnotherLift_IfLiftIsInTransit()
     // {
     //     // Arrange
