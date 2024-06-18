@@ -9,11 +9,12 @@ public class Lift(int id) : ILift
     {
         if (CurrentFloor != floor)
         {
-            Console.WriteLine($"I am at floor {CurrentFloor}");
+            Console.WriteLine($"I am lift: {Id} at floor {CurrentFloor}");
             InTransit = true;
+            Thread.Sleep(100);
             CurrentFloor = floor;
             InTransit = false;
-            Console.WriteLine($"I am at floor {CurrentFloor}");
+            Console.WriteLine($"I am lift: {Id} at floor {CurrentFloor}");
         }
     }
 

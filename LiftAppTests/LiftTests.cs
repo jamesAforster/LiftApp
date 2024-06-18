@@ -47,56 +47,33 @@ public class LiftTests
     }
     
     [Fact]
-    public void WhenLiftCalledToFloor_NearestLiftIsCalledToFloor()
+    public void LiftSystem_SendsAnotherLift_IfLiftIsInTransit()
     {
         // Arrange
         var lift1 = new Lift(1);
         var lift2 = new Lift(2);
-        
         var floorRange = new Range(0, 10);
         var system = new LiftSystem(floorRange);
         CancellationTokenSource source = new CancellationTokenSource();
         CancellationToken token = source.Token;
         
         system.RegisterLift(lift1);
-        system.RegisterLift(lift2);
-    
         lift1.CurrentFloor = 1;
-        lift2.CurrentFloor = 4;
-    
+        
+        system.RegisterLift(lift2);
+        lift2.CurrentFloor = 9;
+        
         // Act
         system.Run(token);
-        system.RequestLift(5);
+        system.RequestLift(2);
+        system.RequestLift(8);
+        
         Thread.Sleep(1000);
         
         source.Cancel();
         
-        // Act & Assert
-        Assert.True(system.GetLiftPosition(2) == 5);
+        // Assert
+        Assert.Equal(system.GetLiftPosition(1), 2);
+        Assert.Equal(system.GetLiftPosition(2), 8);
     }
-    
-    // [Fact]
-    // public void LiftSystem_SendsAnotherLift_IfLiftIsInTransit()
-    // {
-    //     // Arrange
-    //     var lift1 = new Lift(1);
-    //     var lift2 = new Lift(2);
-    //     var floorRange = new Range(0, 10);
-    //     var system = new LiftSystem(floorRange);
-    //     CancellationTokenSource source = new CancellationTokenSource();
-    //     CancellationToken token = source.Token;
-    //     
-    //     system.RegisterLift(lift1);
-    //     system.RegisterLift(lift2);
-    //     
-    //     // Act
-    //     system.Run(token);
-    //     system.RequestLift(1);
-    //     system.RequestLift(2);
-    //     Thread.Sleep(1000);
-    //     
-    //     // Assert
-    //     Assert.Equal(system.GetLiftPosition(1), 1);
-    //     Assert.Equal(system.GetLiftPosition(2), 2);
-    // }
 }
